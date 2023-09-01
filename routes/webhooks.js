@@ -5,6 +5,6 @@ const {postWebhook, getWebHook, postWeb} = require('../controllers/hook')
 
 router.route('/endpoint').post(postWebhook)
 router.route('/getWebHook').get(getWebHook)
-router.route('/postWebHook').post(postWeb)
+router.route("/getWebHook").post(postWeb);
 
 module.exports = router
