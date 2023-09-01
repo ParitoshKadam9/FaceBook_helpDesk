@@ -9,4 +9,5 @@ const veryfyToken = "Nigger"
 
 app.use("/api/hook", require("./routes/webhooks"));
 
+console.log('working')
 app.listen(5000)
