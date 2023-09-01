@@ -1,5 +1,5 @@
 const accessToken =
-  "EAALySOJUMrQBOZBq5y57LN4l81ZB75yBmKU7FFPrZC4sRtrHNfiQtsZBDiWYff2W8F13EZAU3gfRzhEdddWkCz6TNVh08OUIeYSR0tMcIZA5nC7nwzmZAZCs2bqct0zlbFrB7s7x5JqXYQ9zC69gMy0DwsmmwhqsodZBMUYHhWZBGlq3ZCvGJuSBZCTgjTxmPaxA1ZAYq";
+  "EAALySOJUMrQBOyUfkgBYKTd2PGM4PKcElOHMTPjUoaVoHSPm0Y77lS1bHTSAeNreUbgvCI1hLsGZC1BBvxZAwYWGWvSnCzZAfh3DSlR28czNkeSqTgkGDGcnkMguwElbFnGIwGcHbRdZAWs9NphxcZAn6rMTBmdHTlmomZBnY7n1lZBsykCBRQNmPJR2l390aLK";
 const veryfyToken = "Nigger";
 
 const postWebhook = async (req, res) => {
@@ -14,7 +14,7 @@ const postWebhook = async (req, res) => {
 
 //PSID == page scope ID
 
-const getWebHook = async (req, res) => {
+const getWebHook = (req, res) => {
     let verify_token = veryfyToken;
 
     let mode = req.query['hub.mode'];
@@ -34,7 +34,8 @@ const getWebHook = async (req, res) => {
         
     }
 }
-const postWeb = async (req, res) => {
+const postWeb = (req, res) => {
+    console.log('hihihih')
     let body = req.body;
     // check if its an event from a page
     if (body.object === 'page') {
