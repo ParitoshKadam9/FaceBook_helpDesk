@@ -90,14 +90,13 @@ const postWeb = async (req, res) => {
             }
             
 
-
             // we will check what the event is (image, or msg, or what)
-            if (webhook_event.message) {
-                handleMessage(sender_psid, webhook_event.message)
-            }
-            else if (webhook_event.postback) {
-                handlePostback(sender_psid, webhook_event.postback)
-            }
+            // if (webhook_event.message) {
+            //     handleMessage(sender_psid, webhook_event.message)
+            // }
+            // else if (webhook_event.postback) {
+            //     handlePostback(sender_psid, webhook_event.postback)
+            // }
 
         });
         res.status(200).send('mil gaua');
@@ -107,12 +106,23 @@ const postWeb = async (req, res) => {
     }
 }
 
+const sendMsg = (req, res) => {
+    let msg = req.body.text
+    Chat.create({
+        Name: ID,
+        action: true,
+        message: msg,
+    });
+    handleMessage(ID, msg)
+    return res.status(200).send('nice')
+}
+
 function handleMessage(sender_psid, recieved_message) {
     let response;
 
-    if (recieved_message.text) {
+    if (recieved_message) {
         response = {
-            "text" : `you send the msg: "${recieved_message.text}". now send me an image `
+            "text" : `${recieved_message}`
         }
     }
     else if (recieved_message.attachments) {
@@ -190,7 +200,7 @@ const Alltxt = async (req, res) => {
     return res.status(200).json({data})
 }
 
-module.exports = { postWebhook, getWebHook, postWeb, Alltxt };
+module.exports = { postWebhook, getWebHook, postWeb, Alltxt, sendMsg};
 
 
 //curl -X GET "localhost:5000/api/hook/getWebHook?hub.verify_token=Nigger&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"

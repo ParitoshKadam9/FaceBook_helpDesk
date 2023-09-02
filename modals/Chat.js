@@ -6,7 +6,7 @@ const ChatSchema = new mongoose.Schema(
             type: String, requried: true
         },
         action: {
-                    type: String, required: true
+            type: String, required: true
         },
         message: {
                 type: String, required: false,
@@ -15,7 +15,7 @@ const ChatSchema = new mongoose.Schema(
             type: Date,
                     default: Date.now
             }
-        }
+    }
 
 );
 
