@@ -7,6 +7,7 @@ const cors = require('cors')
 const { Server } = require('socket.io');
 const request = require('request');
 const ID = "117152548149209";
+const PageID = "24490130860585831";
 
 
 
@@ -92,7 +93,7 @@ const postWeb = (req, res) => {
 
             // we will check what the event is (image, or msg, or what)
             // if (webhook_event.message) {
-                handleMessage(sender_psid, "nice")
+                // handleMessage(sender_psid, "nice")
             // }
             // else if (webhook_event.postback) {
             //     handlePostback(sender_psid, webhook_event.postback)
@@ -113,7 +114,7 @@ const sendMsg = (req, res) => {
         action: true,
         message: msg,
     });
-    handleMessage(ID, msg)
+    handleMessage(PageID, msg)
     return res.sendStatus(200)
 }
 
