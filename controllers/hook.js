@@ -7,7 +7,7 @@ const postWebhook = async (req, res) => {
   console.log("weeb");
   return res.status(200).json({
     status: true,
-    desc: "success",
+    desc: "succssssess",
   });
 };
 
@@ -38,7 +38,7 @@ const postWeb = (req, res) => {
     console.log('hihihih')
     let body = req.body;
     // check if its an event from a page
-    if (body.object === 'page') {
+    if (true) {
         // abhi sabh se iterate karo and check batches
         body.entry.forEach(function (entry) {
             // yaha msg aayega -> entry is an array but only with 1 element
