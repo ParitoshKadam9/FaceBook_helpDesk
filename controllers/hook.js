@@ -62,53 +62,61 @@ const postWeb = async (req, res) => {
 
             console.log('sender PSID : ' + sender_psid)
 
-            let use 
-            if (sender_psid == ID) {
-                use = Chat.findOne({ name: recipient_id })
-                if (use) {
-                    Chat.findByIdAndUpdate({
-                      name: recipient_id,
-                      $push: {
-                        messages: {
-                          action: false,
-                          message: webhook_event.message.text,
-                        },
-                      },
-                    });
-                }
-                else {
-                    Chat.create({
-                    name: recipient_id,
-                    messages: {
-                        action: true,
-                        message: webhook_event.message.text
-                    }
-                    }); 
-                }
-            }// maine send kiya hai
-            else {
-                use = Chat.findOne({ name: sender_psid })
-                                if (use) {
-                    Chat.findByIdAndUpdate({
-                        name: sender_psid,
-                        $push: {
-                            messages: {
-                                action: false,
-                                message: webhook_event.message.text,
-                            }
-                        }
-                    })
-                }
-                else {
-                    let d = Chat.create({
-                    name: sender_psid,
+            let d = Chat.create({
+                    Name: sender_psid,
                     messages: {
                         action: false,
                         message: webhook_event.message.text,
                     },
-                    }); 
-                }
-            }
+                }); 
+            console.log(d);
+            // let use 
+            // if (sender_psid == ID) {
+            //     use = Chat.findOne({ name: recipient_id })
+            //     if (use) {
+            //         Chat.findByIdAndUpdate({
+            //           name: recipient_id,
+            //           $push: {
+            //             messages: {
+            //               action: false,
+            //               message: webhook_event.message.text,
+            //             },
+            //           },
+            //         });
+            //     }
+            //     else {
+            //         Chat.create({
+            //         name: recipient_id,
+            //         messages: {
+            //             action: true,
+            //             message: webhook_event.message.text
+            //         }
+            //         }); 
+            //     }
+            // }// maine send kiya hai
+            // else {
+            //     use = Chat.findOne({ name: sender_psid })
+            //                     if (use) {
+            //         Chat.findByIdAndUpdate({
+            //             name: sender_psid,
+            //             $push: {
+            //                 messages: {
+            //                     action: false,
+            //                     message: webhook_event.message.text,
+            //                 }
+            //             }
+            //         })
+            //     }
+            //     else {
+            //         let d = Chat.create({
+            //         name: sender_psid,
+            //         messages: {
+            //             action: false,
+            //             message: webhook_event.message.text,
+            //         },
+            //         }); 
+            //     }
+            // }
             
 
 
