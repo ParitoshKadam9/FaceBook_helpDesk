@@ -61,6 +61,7 @@ const postWeb = async (req, res) => {
             let recipient_id = webhook_event.recipient.id;
 
             console.log('sender PSID : ' + sender_psid)
+            console.log('sender PSID : ' + recipient_id)
 
             // let d = Chat.create({
             //         Name: sender_psid,
@@ -72,61 +73,20 @@ const postWeb = async (req, res) => {
             // console.log(d);
             let use 
             if (sender_psid == ID) {
-                (async () => {
-                    try {
-                        use = await Chat.findOne({ Name: recipient_id })
-                    }
-                    catch (err) {
-                        console.log(err)
-                    }
-                })
-
-                    Chat.findOneAndUpdate({
+                    Chat.create({
                       Name: recipient_id,
-                      $push: {
-                        messages: {
-                          action: false,
+                        action: true,
                           message: webhook_event.message.text,
-                        },
-                      },
                     });
                 }
             
             // maine send kiya hai
             else {
-
-                                async () => {
-                                  try {
-                                    use = await Chat.findOne({
-                                      Name: recipient_id,
-                                    });
-                                  } catch (err) {
-                                    console.log(err);
-                                  }
-                                };
-
-                console.log("teri maa ko ye de", use)
-
-                if (use!=null) {
-                    Chat.findOneAndUpdate({
-                        Name: sender_psid,
-                        $push: {
-                            messages: {
-                                action: false,
-                                message: webhook_event.message.text,
-                            }
-                        }
-                    })
-                }
-                else {
-                    let d = Chat.create({
-                    Name: sender_psid,
-                    messages: {
-                        action: false,
-                        message: webhook_event.message.text,
-                    },
-                    }); 
-                }
+                    Chat.create({
+                      Name: sender_psid,
+                      action: false,
+                      message: webhook_event.message.text,
+                    });
             }
             
 
