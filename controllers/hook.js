@@ -95,7 +95,17 @@ const postWeb = async (req, res) => {
             // maine send kiya hai
             else {
 
-                use = Chat.findOne({ Name: sender_psid })
+                                async () => {
+                                  try {
+                                    use = await Chat.findOne({
+                                      Name: recipient_id,
+                                    });
+                                  } catch (err) {
+                                    console.log(err);
+                                  }
+                                };
+
+                console.log("teri maa ko ye de", use)
 
                 if (use!=null) {
                     Chat.findOneAndUpdate({
