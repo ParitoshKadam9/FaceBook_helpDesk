@@ -8,6 +8,9 @@ const verifyToken = require('./middlewares/jwt');
 const passport = require("passport");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const session = require("express-session");
+var cors = require("cors");
+
+app.use(cors());
 
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended : false}))
@@ -21,22 +24,14 @@ const veryfyToken = "Nigger"
 app.use("/api/hook", require("./routes/webhooks"));
 app.use("/auth", require("./routes/user"));
 
-app.use(function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  next();
-});
+
 app.get('/protected', verifyToken, async (req, res) => {
     const email = req.user;
-
     if (!email) {
         return res.status(401).json({ auth : false });
     }
-    em = email.email
-    const user = await User.findOne({ em });
-
+    let user = await User.findOne({ email : email });
+    console.log(user)
     res.json({auth : true, user})
 })
 
