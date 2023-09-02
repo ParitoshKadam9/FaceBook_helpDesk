@@ -2,6 +2,8 @@ const accessToken =
   "EAALySOJUMrQBOyUfkgBYKTd2PGM4PKcElOHMTPjUoaVoHSPm0Y77lS1bHTSAeNreUbgvCI1hLsGZC1BBvxZAwYWGWvSnCzZAfh3DSlR28czNkeSqTgkGDGcnkMguwElbFnGIwGcHbRdZAWs9NphxcZAn6rMTBmdHTlmomZBnY7n1lZBsykCBRQNmPJR2l390aLK";
 const veryfyToken = "Nigger";
 
+const request = require('request');
+
 const postWebhook = async (req, res) => {
   let body = req.body;
   console.log("weeb");
@@ -47,6 +49,14 @@ const postWeb = (req, res) => {
             let sender_psid = webhook_event.sender.id;
             console.log('sender PSID : ' + sender_psid)
 
+            // we will check what the event is (image, or msg, or what)
+            if (webhook_event.message) {
+                handleMessage(sender_psid, webhook_event.message)
+            }
+            else if (webhook_event.postback) {
+                handlePostback(sender_psid, webhook_event.postback)
+            }
+
         });
         res.status(200).send('mil gaua');
     }
@@ -56,15 +66,81 @@ const postWeb = (req, res) => {
 }
 
 function handleMessage(sender_psid, recieved_message) {
-    
+    let response;
+
+    if (recieved_message.text) {
+        response = {
+            "text" : `you send the msg: "${recieved_message.text}". now send me an image `
+        }
+    }
+    else if (recieved_message.attachments) {
+        let attachment_url = recieved_message.attachments[0].payload.url;
+
+        response = {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "generic",
+                    "elements": [{
+                        "title": "Is this the right picture!",
+                        "subtitle": "Tap a button to answer.",
+                        "image_url": attachment_url,
+                        "buttons": [
+                            {
+                                "type": "postback",
+                                "title": "Yes!",
+                                "payload" : "yes",
+                            },
+                            {
+                                "type": "postback",
+                                "title": "No!",
+                                "payload" : "no",
+                            }
+                        ],
+                    }]
+                }
+            }
+        }
+    }
+
+    // send a msg response
+    callSendAPI(sender_psid, response)
 }
 
 function handlePostback(sender_psid, recieved_message) {
-    
+    let response;
+
+    let payload = recieved_postback.payload;
+
+    if (payload === 'yes') {
+        response = { "text": "Thanks!" }
+    }
+    else if (payload === 'no') {
+        response = {'text' : "Oops, try sending another image"}
+    }
+
+    callSendAPI(sender_psid, response)
 }
 
 function callSendAPI(sender_psid, response) {
-    
+    let request_body = {
+        'recipient': {
+            "id" : sender_psid
+        },
+        "message" : response
+    }
+
+    request({
+        "uri": "https://graph.facebook/v7.0/me/messages",
+        "qs": { "access_token": accessToken },
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (!err) { console.log('message sent!') }
+        else {
+            console.error("unable to send message :" + err)
+        }
+    });
 }
 
 module.exports = { postWebhook, getWebHook, postWeb };
