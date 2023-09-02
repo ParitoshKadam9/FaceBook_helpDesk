@@ -46,7 +46,7 @@ const postWeb = (req, res) => {
             // yaha msg aayega -> entry is an array but only with 1 element
             // therefore we only need 0th element
             let data = entry.messaging;
-            console.log(data, "mai hu nigger");
+            // console.log(data, "mai hu nigger");
             let webhook_event = entry.messaging[0];
             console.log(webhook_event)
             let sender_psid = webhook_event.sender.id;
