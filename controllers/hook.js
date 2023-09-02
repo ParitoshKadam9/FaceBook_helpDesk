@@ -35,10 +35,9 @@ const getWebHook = (req, res) => {
     }
 }
 const postWeb = (req, res) => {
-    console.log('hihihih')
     let body = req.body;
     // check if its an event from a page
-    if (true) {
+    if (body.object === 'page') {
         // abhi sabh se iterate karo and check batches
         body.entry.forEach(function (entry) {
             // yaha msg aayega -> entry is an array but only with 1 element

@@ -1,6 +1,9 @@
+const bodyParser = require('body-parser')
 const express = require('express')
-const app = express()
+bodyParser = require('body-parser')
+const app = express().use(bodyParser.json());
 const port = 5000
+
 // const cors = require('cors');
 
 // const hookroutes = require('./routes/webhooks')
