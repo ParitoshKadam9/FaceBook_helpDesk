@@ -67,20 +67,22 @@ const postWeb = async (req, res) => {
                 use = Chat.findOne({ name: recipient_id })
                 if (use) {
                     Chat.findByIdAndUpdate({
-                        name: recipient_id,
-                        $push: {
-                            action: true,
-                            message: webhook_event.message.text,
-                        }
-                    })
+                      name: recipient_id,
+                      $push: {
+                        messages: {
+                          action: false,
+                          message: webhook_event.message.text,
+                        },
+                      },
+                    });
                 }
                 else {
-                    Chat.findByIdAndUpdate({
+                    Chat.create({
                     name: recipient_id,
-                    $push: {
+                    messages: {
                         action: true,
-                        message: webhook_event.message.text,
-                    },
+                        message: webhook_event.message.text
+                    }
                     }); 
                 }
             }// maine send kiya hai
@@ -90,15 +92,17 @@ const postWeb = async (req, res) => {
                     Chat.findByIdAndUpdate({
                         name: sender_psid,
                         $push: {
-                            action: false,
-                            message: webhook_event.message.text,
+                            messages: {
+                                action: false,
+                                message: webhook_event.message.text,
+                            }
                         }
                     })
                 }
                 else {
-                    Chat.findByIdAndUpdate({
+                    let d = Chat.create({
                     name: sender_psid,
-                    $push: {
+                    messages: {
                         action: false,
                         message: webhook_event.message.text,
                     },
