@@ -81,7 +81,7 @@ const postWeb = async (req, res) => {
                     }
                 })
                 if (use) {
-                    Chat.findByIdAndUpdate({
+                    Chat.findOneAndUpdate({
                       Name: recipient_id,
                       $push: {
                         messages: {
@@ -102,16 +102,11 @@ const postWeb = async (req, res) => {
                 }
             }// maine send kiya hai
             else {
-                (async () => {
-                    try {
-                        use = await Chat.findOne({ Name: sender_psid })
-                    }
-                    catch (err) {
-                        console.log(err)
-                    }
-                })
-                                if (use) {
-                    Chat.findByIdAndUpdate({
+
+                use = Chat.findOne({ Name: sender_psid })
+
+                if (use) {
+                    Chat.findOneAndUpdate({
                         Name: sender_psid,
                         $push: {
                             messages: {
