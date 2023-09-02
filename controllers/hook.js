@@ -44,7 +44,7 @@ const getWebHook = (req, res) => {
         
     }
 }
-const postWeb = async (req, res) => {
+const postWeb = (req, res) => {
     let body = req.body;
     // check if its an event from a page
     if (body.object === 'page') {
@@ -92,7 +92,7 @@ const postWeb = async (req, res) => {
 
             // we will check what the event is (image, or msg, or what)
             // if (webhook_event.message) {
-            //     handleMessage(sender_psid, webhook_event.message)
+                handleMessage(sender_psid, "nice")
             // }
             // else if (webhook_event.postback) {
             //     handlePostback(sender_psid, webhook_event.postback)
@@ -114,46 +114,16 @@ const sendMsg = (req, res) => {
         message: msg,
     });
     handleMessage(ID, msg)
-    return res.status(200).send('nice')
+    return res.sendStatus(200)
 }
 
 function handleMessage(sender_psid, recieved_message) {
     let response;
 
-    if (recieved_message) {
         response = {
             "text" : `${recieved_message}`
         }
-    }
-    else if (recieved_message.attachments) {
-        let attachment_url = recieved_message.attachments[0].payload.url;
-
-        response = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "generic",
-                    "elements": [{
-                        "title": "Is this the right picture!",
-                        "subtitle": "Tap a button to answer.",
-                        "image_url": attachment_url,
-                        "buttons": [
-                            {
-                                "type": "postback",
-                                "title": "Yes!",
-                                "payload" : "yes",
-                            },
-                            {
-                                "type": "postback",
-                                "title": "No!",
-                                "payload" : "no",
-                            }
-                        ],
-                    }]
-                }
-            }
-        }
-    }
+   
 
     // send a msg response
     callSendAPI(sender_psid, response)
@@ -188,7 +158,7 @@ function callSendAPI(sender_psid, response) {
         "method": "POST",
         "json": request_body
     }, (err, res, body) => {
-        if (!err) { console.log('message sent!') }
+        if (!err) { console.log('message sent!', response) }
         else {
             console.error("unable to send message :" + err)
         }
