@@ -72,7 +72,17 @@ const postWeb = async (req, res) => {
             // console.log(d);
             let use 
             if (sender_psid == ID) {
-                use = Chat.findOne({ name: recipient_id })
+                Chat.findOne(
+                    { Name: recipient_id },(err, document) => {
+                        if (err) {
+                            console.log(err);
+                        } else if (document) {
+                            use = true;
+                        } else {
+                            use = false;
+                        }
+                    }
+                );
                 if (use) {
                     Chat.findByIdAndUpdate({
                       Name: recipient_id,
@@ -95,7 +105,17 @@ const postWeb = async (req, res) => {
                 }
             }// maine send kiya hai
             else {
-                use = Chat.findOne({ name: sender_psid })
+                Chat.findOne({ Name: sender_psid }, (err, document) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else if (document) {
+                        use = true
+                    }
+                    else {
+                        use=false
+                    }
+                })
                 console.log(use, "ye mila")
                                 if (use) {
                     Chat.findByIdAndUpdate({
