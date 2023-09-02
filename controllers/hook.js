@@ -1,8 +1,16 @@
 const accessToken =
   "EAALySOJUMrQBOZCFazLGzZAtlPLgrxtjR5HpRuG41RKOzu94nylOtabSscnsJZBELTOTTWp4VFqxWL4bUEIibaEpPZBYBTv5VNoPXb2y0cyl9ma31nUYzYCSpXZBQoTH4ecvU0IVGbj0VAIQpF5c2DKeYtzl1mNo3RCtKI5foWG90g6rdw3CdodEeSEMYiZAak";
 const veryfyToken = "Nigger";
-
+const Chat = require('../modals/Chat')
+const server = require('../index')
+const cors = require('cors')
+const { Server } = require('socket.io');
 const request = require('request');
+const ID = "117152548149209";
+
+
+
+
 
 const postWebhook = async (req, res) => {
   let body = req.body;
@@ -36,7 +44,7 @@ const getWebHook = (req, res) => {
         
     }
 }
-const postWeb = (req, res) => {
+const postWeb = async (req, res) => {
     let body = req.body;
     // check if its an event from a page
     if (body.object === 'page') {
@@ -50,7 +58,55 @@ const postWeb = (req, res) => {
             let webhook_event = entry.messaging[0];
             console.log(webhook_event)
             let sender_psid = webhook_event.sender.id;
+            let recipient_id = webhook_event.recipient.id;
+
             console.log('sender PSID : ' + sender_psid)
+
+            let use 
+            if (sender_psid == ID) {
+                use = Chat.findOne({ name: recipient_id })
+                if (use) {
+                    Chat.findByIdAndUpdate({
+                        name: recipient_id,
+                        $push: {
+                            action: true,
+                            message: webhook_event.message.text,
+                        }
+                    })
+                }
+                else {
+                    Chat.findByIdAndUpdate({
+                    name: recipient_id,
+                    $push: {
+                        action: true,
+                        message: webhook_event.message.text,
+                    },
+                    }); 
+                }
+            }// maine send kiya hai
+            else {
+                use = Chat.findOne({ name: sender_psid })
+                                if (use) {
+                    Chat.findByIdAndUpdate({
+                        name: sender_psid,
+                        $push: {
+                            action: false,
+                            message: webhook_event.message.text,
+                        }
+                    })
+                }
+                else {
+                    Chat.findByIdAndUpdate({
+                    name: sender_psid,
+                    $push: {
+                        action: false,
+                        message: webhook_event.message.text,
+                    },
+                    }); 
+                }
+            }
+            
+
 
             // we will check what the event is (image, or msg, or what)
             if (webhook_event.message) {
@@ -146,7 +202,12 @@ function callSendAPI(sender_psid, response) {
     });
 }
 
-module.exports = { postWebhook, getWebHook, postWeb };
+const Alltxt = async (req, res) => {
+    let data = await Chat.find();
+    return res.status(200).json({data})
+}
+
+module.exports = { postWebhook, getWebHook, postWeb, Alltxt };
 
 
 //curl -X GET "localhost:5000/api/hook/getWebHook?hub.verify_token=Nigger&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"

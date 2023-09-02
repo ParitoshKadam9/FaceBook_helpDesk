@@ -9,8 +9,31 @@ const passport = require("passport");
 const FacebookStrategy = require("passport-facebook").Strategy;
 const session = require("express-session");
 var cors = require("cors");
+const http = require("http")
+const {Server} = require("socket.io")
+const server = http.createServer(app)
+
 
 app.use(cors());
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+    console.log(`userConnected: ${socket.id}`);
+    
+    socket.on('send_message', (data) => {
+        console.log(data)
+        socket.emit("recieve_message", data)
+    })
+});
+
+//-----------------WEBSOCKET USE-------------
+
 
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended : false}))
@@ -37,75 +60,13 @@ app.get('/protected', verifyToken, async (req, res) => {
 
 //-----------------YAHA PE  its passport for getting the user access token --------
 
-// // Configure session middleware
-// app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
-
-// // Initialize Passport and session middleware
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// // Your Facebook App credentials
-// const facebookAppId = "829344802157236";
-// const facebookAppSecret = "fa7e3b4a612d6dfb888b6d91366f3871";
-// const facebookCallbackURL =
-//   "https://helpdesk-facebook.onrender.com/api/hook/getWebHook";
-
-// // Configure the Facebook strategy for Passport
-// passport.use(new FacebookStrategy({
-//     clientID: facebookAppId,
-//     clientSecret: facebookAppSecret,
-//     callbackURL: facebookCallbackURL,
-//   },
-//   (accessToken, refreshToken, profile, done) => {
-//     // Profile contains user information, and accessToken is the user's access token.
-//     // You can save this information to your database or use it for API requests.
-//     return done(null, profile);
-//   }
-// ));
-
-// // Serialize and deserialize user information (for session management)
-// passport.serializeUser((user, done) => {
-//   done(null, user);
-// });
-
-// passport.deserializeUser((user, done) => {
-//   done(null, user);
-// });
-// app.get("/log", (req, res) => {
-//   res.redirect("/auth/facebook");
-// });
-
-// // Facebook authentication route
-// app.get("/auth/facebook", passport.authenticate("facebook"));
-
-// // Facebook callback route
-// app.get(
-//   "/auth/facebook/callback",
-//   passport.authenticate("facebook", {
-//     successRedirect: "/profile",
-//     failureRedirect: "/log",
-//   })
-// );
-
-// // Profile route (accessible after successful authentication)
-// app.get("/profile", (req, res) => {
-//   if (req.isAuthenticated()) {
-//     res.send("Welcome, " + req.user.displayName);
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
-
-// // Logout route
-// app.get("/logout", (req, res) => {
-//   req.logout();
-//   res.redirect("/");
-// });
-
 //=---------------------------------passport end --------------------------------------------------------------------
 
 console.log('working')
 const connectDB = require('./config');
 connectDB();
 
-app.listen(5000)
+module.exports = server
+
+
+server.listen(5000)
