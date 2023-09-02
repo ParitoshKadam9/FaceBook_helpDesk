@@ -80,7 +80,7 @@ const postWeb = async (req, res) => {
                         console.log(err)
                     }
                 })
-                if (use) {
+
                     Chat.findOneAndUpdate({
                       Name: recipient_id,
                       $push: {
@@ -91,21 +91,13 @@ const postWeb = async (req, res) => {
                       },
                     });
                 }
-                else {
-                    Chat.create({
-                    Name: recipient_id,
-                    messages: {
-                        action: true,
-                        message: webhook_event.message.text
-                    }
-                    }); 
-                }
-            }// maine send kiya hai
+            
+            // maine send kiya hai
             else {
 
                 use = Chat.findOne({ Name: sender_psid })
 
-                if (use) {
+                if (use!=null) {
                     Chat.findOneAndUpdate({
                         Name: sender_psid,
                         $push: {
