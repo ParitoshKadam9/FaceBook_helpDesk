@@ -25,10 +25,7 @@ const UserSchema = new mongoose.Schema(
                     type: String,
                     required: true
                 },
-                email: {
-                    type: String, required: false
-                },
-                userId: {
+                message: {
                     type: String, required: true
                 }
             }

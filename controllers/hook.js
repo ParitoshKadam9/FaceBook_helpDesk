@@ -8,7 +8,7 @@ const PageID = "24490130860585831";
 
 const io = require('socket.io-client');
 
-const socket = io("http://localhost:5000")
+const socket = io("https://helpdesk-facebook.onrender.com");
 
 function sendDataToServer(data) {
     socket.emit('customEvent', data)
@@ -77,7 +77,7 @@ const postWeb = (req, res) => {
             //     }); 
             // console.log(d);
             let use 
-            if (sender_psid == PageID) {
+            if (sender_psid == ID) {
                     Chat.create({
                       Name: recipient_id,
                         action: true,
@@ -126,11 +126,7 @@ const sendMsg = (req, res) => {
     let msg = req.body.text
     let id = req.body.reciever;
     console.log(id)
-    // Chat.create({
-    //     Name: PageID,
-    //     action: true,
-    //     message: msg,
-    // });
+
                 sendDataToServer({
                   Name: id,
                   action: true,
@@ -149,21 +145,6 @@ function handleMessage(sender_psid, recieved_message) {
    
 
     // send a msg response
-    callSendAPI(sender_psid, response)
-}
-
-function handlePostback(sender_psid, recieved_postback) {
-    let response;
-
-    let payload = recieved_postback.payload;
-
-    if (payload === 'yes') {
-        response = { "text": "Thanks!" }
-    }
-    else if (payload === 'no') {
-        response = {'text' : "Oops, try sending another image"}
-    }
-
     callSendAPI(sender_psid, response)
 }
 
