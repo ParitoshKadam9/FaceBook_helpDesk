@@ -2,6 +2,7 @@ const accessToken =
   "EAALySOJUMrQBOZCFazLGzZAtlPLgrxtjR5HpRuG41RKOzu94nylOtabSscnsJZBELTOTTWp4VFqxWL4bUEIibaEpPZBYBTv5VNoPXb2y0cyl9ma31nUYzYCSpXZBQoTH4ecvU0IVGbj0VAIQpF5c2DKeYtzl1mNo3RCtKI5foWG90g6rdw3CdodEeSEMYiZAak";
 const veryfyToken = "Nigger";
 const Chat = require('../modals/Chat')
+const User = require('../modals/user')
 const request = require('request');
 const ID = "117152548149209";
 const PageID = "24490130860585831";
@@ -122,9 +123,23 @@ const postWeb = (req, res) => {
     }
 }
 
-const sendMsg = (req, res) => {
+const sendMsg = async (req, res) => {
     let msg = req.body.text
     let id = req.body.reciever;
+    let email = req.body.email
+
+    await User.findOneAndUpdate(
+        { email: email },
+        {
+            $push: {
+                usersAccessed: {
+                    name: id,
+                    message : msg
+                }
+            }
+        }
+    )
+
     console.log(id)
 
                 sendDataToServer({
