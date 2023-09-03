@@ -49,7 +49,7 @@ const getWebHook = (req, res) => {
         
     }
 }
-const postWeb = async (req, res) => {
+const postWeb = (req, res) => {
     let body = req.body;
     // check if its an event from a page
     if (body.object === 'page') {
@@ -77,7 +77,7 @@ const postWeb = async (req, res) => {
             //     }); 
             // console.log(d);
             let use 
-            if (sender_psid == ID) {
+            if (sender_psid == PageID) {
                     Chat.create({
                       Name: recipient_id,
                         action: true,
