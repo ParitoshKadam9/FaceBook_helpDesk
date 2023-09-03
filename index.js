@@ -18,7 +18,8 @@ app.use(cors());
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin:
+      "https://facebook-helper-react-3zahjvw48-paritoshkadam9.vercel.app/",
   },
 });
 
