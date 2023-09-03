@@ -12,26 +12,32 @@ var cors = require("cors");
 const http = require("http")
 const {Server} = require("socket.io")
 const server = http.createServer(app)
-
+const socketIo = require('socket.io')
 
 app.use(cors());
 
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
   },
 });
 
-io.on("connection", (socket) => {
-    console.log(`userConnected: ${socket.id}`);
-    
-    socket.on('send_message', (data) => {
-        console.log(data)
-        socket.emit("recieve_message", data)
-    })
-});
+io.on('connection', (socket) => {
+  
+  console.log('A Client Connected');
 
+  socket.on('customEvent', (data) => {
+    console.log('recieved data from client', data);
+    socket.broadcast.emit("send_msg", data)
+    console.log('nice')
+  })
+
+
+  socket.on('disconnect', () => {
+    console.log('A client disconnected')
+  })
+
+})
 //-----------------WEBSOCKET USE-------------
 
 

@@ -2,13 +2,17 @@ const accessToken =
   "EAALySOJUMrQBOZCFazLGzZAtlPLgrxtjR5HpRuG41RKOzu94nylOtabSscnsJZBELTOTTWp4VFqxWL4bUEIibaEpPZBYBTv5VNoPXb2y0cyl9ma31nUYzYCSpXZBQoTH4ecvU0IVGbj0VAIQpF5c2DKeYtzl1mNo3RCtKI5foWG90g6rdw3CdodEeSEMYiZAak";
 const veryfyToken = "Nigger";
 const Chat = require('../modals/Chat')
-const server = require('../index')
-const cors = require('cors')
-const { Server } = require('socket.io');
 const request = require('request');
 const ID = "117152548149209";
 const PageID = "24490130860585831";
 
+const io = require('socket.io-client');
+
+const socket = io("http://localhost:5000")
+
+function sendDataToServer(data) {
+    socket.emit('customEvent', data)
+}
 
 
 
@@ -45,7 +49,7 @@ const getWebHook = (req, res) => {
         
     }
 }
-const postWeb = (req, res) => {
+const postWeb = async (req, res) => {
     let body = req.body;
     // check if its an event from a page
     if (body.object === 'page') {
@@ -79,6 +83,12 @@ const postWeb = (req, res) => {
                         action: true,
                           message: webhook_event.message.text,
                     });
+                                sendDataToServer({
+                                  Name: recipient_id,
+                                  action: true,
+                                  message: webhook_event.message.text,
+                                });
+                    
                 }
             
             // maine send kiya hai
@@ -88,6 +98,11 @@ const postWeb = (req, res) => {
                       action: false,
                       message: webhook_event.message.text,
                     });
+                                sendDataToServer({
+                                  Name: sender_psid,
+                                  action: false,
+                                  message: webhook_event.message.text,
+                                });
             }
             
 
@@ -109,12 +124,19 @@ const postWeb = (req, res) => {
 
 const sendMsg = (req, res) => {
     let msg = req.body.text
-    Chat.create({
-        Name: ID,
-        action: true,
-        message: msg,
-    });
-    handleMessage(PageID, msg)
+    let id = req.body.reciever;
+    console.log(id)
+    // Chat.create({
+    //     Name: PageID,
+    //     action: true,
+    //     message: msg,
+    // });
+                sendDataToServer({
+                  Name: id,
+                  action: true,
+                  message: msg,
+                });
+    handleMessage(id, msg)
     return res.sendStatus(200)
 }
 
@@ -171,7 +193,7 @@ const Alltxt = async (req, res) => {
     return res.status(200).json({data})
 }
 
-module.exports = { postWebhook, getWebHook, postWeb, Alltxt, sendMsg};
+module.exports = { postWebhook, getWebHook, postWeb, Alltxt, sendMsg, sendDataToServer};
 
 
 //curl -X GET "localhost:5000/api/hook/getWebHook?hub.verify_token=Nigger&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"
